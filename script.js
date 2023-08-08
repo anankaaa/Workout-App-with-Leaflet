@@ -339,17 +339,13 @@ class App {
   }
 
   removeOne(id) {
-    console.log('del');
-    console.log(id);
-    let data = JSON.parse(localStorage.getItem('workouts'));
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].id == id) {
-        data.splice(i, 1);
+    for (let i = 0; i < this.#workouts.length; i++) {
+      if (this.#workouts[i].id == id) {
+        this.#workouts.splice(i, 1);
       }
     }
-    console.log(data);
-    data = JSON.stringify(data);
-    localStorage.setItem('workouts', data);
+
+    this._setLocalStorage();
     location.reload();
   }
 
