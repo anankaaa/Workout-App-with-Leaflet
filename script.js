@@ -7,6 +7,8 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const deleteAllButton = document.querySelector('.delete-all-button');
+const deleteIcon = document.querySelector('.delete__icon');
 
 class Workout {
   date = new Date();
@@ -246,7 +248,12 @@ class App {
   _renderWorkout(workout) {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
-        <h2 class="workout__title">${workout.description}</h2>
+        <h2 class="workout__title">${
+          workout.description
+        }<span class="delete__icon" onClick="app.removeOne(${
+      workout.id
+    })">❌</span></h2>
+        
         <div class="workout__details">
           <span class="workout__icon">${
             workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
@@ -274,6 +281,7 @@ class App {
           <span class="workout__unit">spm</span>
         </div>
       </li>
+      
       `;
 
     if (workout.type === 'cycling')
@@ -289,9 +297,11 @@ class App {
           <span class="workout__unit">m</span>
         </div>
       </li>
+  
       `;
 
     form.insertAdjacentHTML('afterend', html);
+    deleteAllButton.style.display = 'flex';
   }
 
   _moveToPopup(e) {
@@ -326,6 +336,21 @@ class App {
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
     });
+  }
+
+  removeOne(id) {
+    console.log('del');
+    console.log(id);
+    let data = JSON.parse(localStorage.getItem('workouts'));
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].id == id) {
+        data.splice(i, 1);
+      }
+    }
+    console.log(data);
+    data = JSON.stringify(data);
+    localStorage.setItem('workouts', data);
+    location.reload();
   }
 
   reset() {
